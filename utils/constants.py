@@ -20,6 +20,22 @@ class Settings(Enum):
     CACHE_TABLE_NAME = "cache_table"
 
 
+# Model Choices
+# =====================================================
+class ModelChoices(Enum):
+    MALE = _("Male")
+    MALE_TEXT = "M"
+    FEMALE = _("Female")
+    FEMALE_TEXT = "F"
+    OTHER = _("Other")
+    OTHER_TEXT = "O"
+    GENDER_CHOICE = (
+        (MALE_TEXT, MALE),
+        (FEMALE_TEXT, FEMALE),
+        (OTHER_TEXT, OTHER),
+    )
+
+
 # Admin Action Description
 # =====================================================
 class AdminAction(Enum):
@@ -27,6 +43,8 @@ class AdminAction(Enum):
     USER_ADMIN_STATUS_ACTIVE_DESCRIPTION = _("Mark Selected Items Active")
     USER_INACTIVE_SUCCESS_MESSAGE = _("%d users were successfully been inactive.")
     USER_ACTIVE_SUCCESS_MESSAGE = _("%d users were successfully been active.")
+    STATUS_INACTIVE = False
+    STATUS_ACTIVE = True
 
 
 # Error Messages
@@ -76,6 +94,7 @@ class Urls(Enum):
     FORCE_LOGOUT_REVERSE = "force-logout"
     REGISTER_REVERSE = "signup"
     PROFILE_REVERSE = "profile"
+    PROFILE_URL = "/accounts/profile/{pk}"
 
 
 # Context Variable Names

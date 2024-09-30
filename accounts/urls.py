@@ -5,7 +5,6 @@ from accounts.views import (
     registration_view,
     profile_view,
     force_logout_view,
-    update_api_view,
 )
 from utils.constants import Urls
 
@@ -15,5 +14,4 @@ urlpatterns = [
     path("force_logout/", force_logout_view, name=Urls.FORCE_LOGOUT_REVERSE.value),
     path("signup/", registration_view, name=Urls.REGISTER_REVERSE.value),
     path("profile/<int:pk>/", profile_view, name=Urls.PROFILE_REVERSE.value),
-    path("update_api", update_api_view, name=Urls.UPDATE_API_REVERSE.value),
 ]

@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "dj_database_url",
     "debug_toolbar",
     "schema_graph",
+    "phonenumber_field",
 ]
 
 
