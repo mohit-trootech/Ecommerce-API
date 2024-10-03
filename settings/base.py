@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "accounts.apps.AccountsConfig",
+    "ecommerce",
     "rest_framework",
     "django_extensions",
     "dj_database_url",
@@ -29,14 +30,15 @@ INSTALLED_APPS = [
     "phonenumber_field",
 ]
 
-
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 # Middlewares
 # =====================================================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -156,7 +158,7 @@ DEBUG_TOOLBAR_PANELS = [
 # Rest Framework Configuration
 # https://www.django-rest-framework.org/
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
 }

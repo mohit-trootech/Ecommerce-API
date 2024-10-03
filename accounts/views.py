@@ -10,6 +10,8 @@ from accounts.models import User
 from utils.utils import force_logout
 from typing import Any
 from django.shortcuts import redirect
+from rest_framework import viewsets
+from accounts.serializer import UserSerializer
 
 
 class LogoutView(View):
@@ -114,3 +116,8 @@ class RegistrationView(FormView):
 
 
 registration_view = RegistrationView.as_view()
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
