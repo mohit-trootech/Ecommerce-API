@@ -5,11 +5,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ecommerce API{% endblock %}</title>
+    <title>{% block title %}Ecommerce API{% endblock %}</title>
     <link rel="shortcut icon" href="{% static 'img/ecommerce.png' %}" type="image/x-icon">
     {% include 'ecommerce/css.html' %}
 </head>
-{% include 'todos/preload.html' %}
+{% include 'ecommerce/preload.html' %}
 
 <body>
     {% csrf_token %}
@@ -19,6 +19,7 @@
         {% include 'ecommerce/footer.html' %}
     </div>
     {% include 'ecommerce/message.html' %}
+    <div id="triggerMessage"></div>
 </body>
 {% include 'ecommerce/postload.html' %}
 

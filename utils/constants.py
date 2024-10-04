@@ -7,7 +7,7 @@ from dotenv import dotenv_values
 # =====================================================
 class Settings(Enum):
     ROOT_URL = "ecommerce.urls"
-    TEMPLATE = "templates/"
+    TEMPLATE = "templates"
     STATIC_URL = "static/"
     STATICFILES_DIRS = "templates/static/"
     STATIC_ROOT = "assets/"
@@ -20,6 +20,29 @@ class Settings(Enum):
     CACHE_TABLE_NAME = "cache_table"
 
 
+# Model Choices
+# =====================================================
+class ModelChoices(Enum):
+    MALE = _("Male")
+    MALE_TEXT = "M"
+    FEMALE = _("Female")
+    FEMALE_TEXT = "F"
+    OTHER = _("Other")
+    OTHER_TEXT = "O"
+    GENDER_CHOICE = (
+        (MALE_TEXT, MALE),
+        (FEMALE_TEXT, FEMALE),
+        (OTHER_TEXT, OTHER),
+    )
+
+
+# Custom Exceptions Messages Constants
+# =====================================================
+class CustomExceptionMessages(Enum):
+    CATEGORY_GET_EXCEPTION = "Categories not available, please check the internet connection or contact API owner"
+    USER_NOT_AVAILABLE = "User not Available"
+
+
 # Admin Action Description
 # =====================================================
 class AdminAction(Enum):
@@ -27,6 +50,8 @@ class AdminAction(Enum):
     USER_ADMIN_STATUS_ACTIVE_DESCRIPTION = _("Mark Selected Items Active")
     USER_INACTIVE_SUCCESS_MESSAGE = _("%d users were successfully been inactive.")
     USER_ACTIVE_SUCCESS_MESSAGE = _("%d users were successfully been active.")
+    STATUS_INACTIVE = False
+    STATUS_ACTIVE = True
 
 
 # Error Messages
@@ -57,11 +82,17 @@ class Success(Enum):
 # Templates Name
 # =====================================================
 class Templates(Enum):
-    INDEX = "ecommerce/index.html"
+    INDEX = "ecommerce/home.html"
     ABOUT = "ecommerce/about.html"
+    TERMS = "ecommerce/terms.html"
     PROFILE = "accounts/profile.html"
     LOGIN = "accounts/login.html"
     SIGNUP = "accounts/signup.html"
+    STORE = "store/index.html"
+    PRODUCT_ADD = "store/add-product.html"
+    CART = "store/cart.html"
+    WISHLIST = "store/wishlist.html"
+    PRODUCT = "store/product-page.html"
 
 
 # Urls Path & Reverse
@@ -69,6 +100,8 @@ class Templates(Enum):
 class Urls(Enum):
     HOME = "index"
     ABOUT = "about"
+    TERMS = "terms"
+    STORE = "store"
     SCHEMA_REVERSE = "schema"
     LOGIN_REVERSE = "login"
     LOGIN = "/accounts/login/"
@@ -76,12 +109,30 @@ class Urls(Enum):
     FORCE_LOGOUT_REVERSE = "force-logout"
     REGISTER_REVERSE = "signup"
     PROFILE_REVERSE = "profile"
+    PROFILE_URL = "/accounts/profile/{pk}"
+    API_REVERSE = "api"
+    ADD_PRODUCT = "product-add"
+    CART = "cart"
+    WISHLIST = "wishlist"
+    PRODUCT = "product"
 
 
-# Context Variable Names
+# Operation Type Names
 # =====================================================
-class ContextNames(Enum):
-    pass
+class OperationType(Enum):
+    ADD = "add"
+    REMOVE = "remove"
+    UPDATE = "update"
+
+
+# Serializers Variable Names
+# =====================================================
+class SerializersConstants(Enum):
+    PRODUCTS_REQUIRED = "Products are required"
+    CATEGORY_NOT_EXIST = "Category does not exist with the given ID"
+    IMAGES_REQUIRED = "Images are Required"
+    PRODUCT_NOT_EXIST = "Products does not exist with the given ID"
+    OPERATION_REQUIRED = "Please Choose Operation"
 
 
 # Forms Constants Dictionary
@@ -93,6 +144,18 @@ FORM_LABELS = {
     "email": "Enter Email",
     "password": "Enter Password",
 }
+
+
+class FormLabel(Enum):
+    TITLE = _("Title")
+    DESCRIPTION = _("Description")
+    PRICE = _("Price")
+    STOCK = _("Stock")
+    CATEGORY = _("Category")
+    IMAGE_1 = _("Image 1")
+    IMAGE_2 = _("Image 2")
+    IMAGE_3 = _("Image 3")
+    IMAGE_4 = _("Image 4")
 
 
 # Email Configurations
@@ -166,5 +229,5 @@ THEME_CHOICES = (
     ("nord", "nord"),
     ("sunset", "sunset"),
 )
-
+CATEGORY_GET = "http://127.0.0.1:8000/api/categories/"
 TYPE_HTML = "text/html"

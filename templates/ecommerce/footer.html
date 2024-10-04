@@ -1,15 +1,21 @@
 <footer class="footer bg-base-200 text-base-content p-10 justify-around" data-aos="fade-up">
     <nav>
         <h6 class="footer-title">Services</h6>
-        <a class="link link-hover" href="{% url 'todo-list' %}">Todos List</a>
-        <a class="link link-hover" href="{% url 'about'  %}">Documentation</a>
-        <a class="link link-hover" href="/#api-Example">Example</a>
+        {% if request.user.is_authenticated %}
+        <a class="link link-hover" href="{% url 'profile' request.user.pk %}">Profile</a>
+        {% else %}
+        <a class="link link-hover" href="{% url 'login' %}">Login</a>
+        {% endif %}
+        <a class="link link-hover" href="{% url 'store' %}">Demo Project</a>
+        <a class="link link-hover" href="https://github.com/mohit-trootech/Ecommerce-API" target="_blank">Repository</a>
     </nav>
     <nav>
-        <h6 class="footer-title">Todos</h6>
+        <h6 class="footer-title">Ecommerce</h6>
         <a class="link link-hover" href="{% url 'index' %}">Home</a>
-        <a class="link link-hover" href="">Profile</a>
-        <a class="link link-hover" href="">API Key</a>
+        <a class="link link-hover" href="{% url 'about' %}">Documentation</a>
+        <a class="link link-hover" href="/api/">Endpoints</a>
+        <a class="link link-hover" href="{% url 'terms' %}">Terms and Conditions</a>
+
     </nav>
     <form id="newsletter-form">
         {% csrf_token %}
@@ -19,7 +25,7 @@
                 <span class="label-text">Subscribe our Newsletter for Latest Updates</span>
             </label>
             <div class="join">
-                <label class="input input-bordered flex items-center gap-2">
+                <label class="input input-bordered w-96 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                         class="h-4 w-4 opacity-70">
                         <path
@@ -45,7 +51,8 @@
             </path>
         </svg>
         <p>
-            Todos - Coded and maintained with ❤️ by <a href="https://github.com/mohit-trootech">Mohit Prajapat</a>
+            Ecommerce API - Coded and maintained with ❤️ by <a href="https://github.com/mohit-trootech">Mohit
+                Prajapat</a>
             <br />
             &copy; Mohit Prajapat 2024
         </p>

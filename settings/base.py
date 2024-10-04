@@ -21,25 +21,31 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "accounts.apps.AccountsConfig",
+    "ecommerce",
     "rest_framework",
     "django_extensions",
     "dj_database_url",
     "debug_toolbar",
     "schema_graph",
+    "phonenumber_field",
+    "django_ui_forms",
 ]
 
-
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 # Middlewares
 # =====================================================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "utils.ApiStatMiddleware.ApiStatMiddleware",
 ]
 
 # Middlewares
@@ -152,10 +158,30 @@ DEBUG_TOOLBAR_PANELS = [
     "debug_toolbar.panels.profiling.ProfilingPanel",
 ]
 
+# Django Cache Configuration
+# https://docs.djangoproject.com/en/5.1/topics/cache/
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": Settings.CACHE_TABLE_NAME.value,
+    }
+}
+
 # Rest Framework Configuration
 # https://www.django-rest-framework.org/
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [],
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 20,
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "PAGE_SIZE": 4,
 }
+
+
+# Form Rendering Configuration
+# https://pypi.org/project/django-ui-forms/
+from django.forms.renderers import TemplatesSetting
+
+
+class CustomFormRenderer(TemplatesSetting):
+    form_template_name = "tailwind_forms_snippet.html"
+
+
+FORM_RENDERER = "settings.base.CustomFormRenderer"

@@ -1,8 +1,15 @@
-function getRequest(url, data, callback) {
+function getRequest(url, callback) {
   /* Standart Get Request Function */
-  ajaxRequest("GET", url, data, callback);
+  ajaxRequest("GET", url, null, callback);
 }
-
+function postRequest(url, data, callback) {
+  /* Standart Post Request Function */
+  ajaxRequest("POST", url, data, callback);
+}
+function patchRequest(url, data, callback) {
+  /*Standart Patch Request Function */
+  ajaxRequest("PATCH", url, data, callback);
+}
 function ajaxRequest(type, url, data, callback) {
   /*Standart Ajax Request Function */
   $.ajax({

@@ -10,6 +10,8 @@ from accounts.models import User
 from utils.utils import force_logout
 from typing import Any
 from django.shortcuts import redirect
+from rest_framework import viewsets
+from accounts.serializer import UserSerializer
 
 
 class LogoutView(View):
@@ -44,7 +46,7 @@ class ProfileView(UpdateView):
     form_class = UserUpdateForm
     model = User
     template_name = Templates.PROFILE.value
-    success_url = Urls.PROFILE_SUCCESS_URL.value
+    success_url = Urls.PROFILE_URL.value
 
     def get_success_url(self) -> str:
         """
@@ -60,7 +62,7 @@ profile_view = ProfileView.as_view()
 class LoginView(FormView):
     template_name = Templates.LOGIN.value
     form_class = UserLoginForm
-    success_url = reverse_lazy(Urls.TODOS_HOME.value)
+    success_url = reverse_lazy(Urls.HOME.value)
 
     def form_valid(self, form):
         """
@@ -116,15 +118,6 @@ class RegistrationView(FormView):
 registration_view = RegistrationView.as_view()
 
 
-class UpdateApiKeyView(View):
-
-    def get(self, request, *args: Any, **kwargs: Any) -> Any:
-        from uuid import uuid4
-
-        request.user.api_key = uuid4()
-        request.user.save()
-        info(request, Success.API_KEY_UPDATED.value)
-        return redirect(Urls.PROFILE_SUCCESS_URL.value.format(pk=request.user.pk))
-
-
-update_api_view = UpdateApiKeyView.as_view()
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

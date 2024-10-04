@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-10 border shadow-lg my-10 rounded-lg">
+    <form method="POST">
+        {{form}}
+        <button type="submit" id="productAdd"
+            class="block w-full p-5 rounded shadow bg-base-300 hover:bg-base-400 hover:scale-100 scale-95 transition delay-100 duration-300 ease-in-out">
+            Add Product
+        </button>
+    </form>
+</div>
+{% endblock %}
