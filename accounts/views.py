@@ -6,9 +6,8 @@ from django.contrib.messages import info
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
-from accounts.models import User
+from django.contrib.auth.models import User
 from utils.utils import force_logout
-from typing import Any
 from django.shortcuts import redirect
 from rest_framework import viewsets
 from accounts.serializer import UserSerializer

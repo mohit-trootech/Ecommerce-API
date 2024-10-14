@@ -1,51 +1,55 @@
-from rest_framework import serializers, status, exceptions
-from ecommerce.models import Product, Cart, ProductImages, Wishlist, Category, Order
-from django.db.utils import IntegrityError
-from uuid import uuid4
-from utils.constants import SerializersConstants, OperationType
+from rest_framework import serializers
+from ecommerce.models import Product, Cart, ProductImages, Wishlist, Category
+from utils.constants import OperationType
+from accounts.serializer import BaseCartWishlistUserSerializer
 
 
-class CustomModelSerializer(serializers.ModelSerializer):
+class DynamicModelFieldSerializer(serializers.ModelSerializer):
 
-    def get_products_initial_data(self):
-        products = self.initial_data.get("products") or None
-        if products is None:
-            raise exceptions.NotFound(
-                SerializersConstants.PRODUCTS_REQUIRED.value,
-            )
-        if isinstance(products, str):
-            products = eval(products)
-        return products
+    def __init__(self, *args, **kwargs):
+        fields = kwargs.pop("fields", None)
 
-    def get_product_from_query_params(self):
-        product = self.context.get("request").query_params.get("product") or None
-        if product is None:
-            raise exceptions.NotFound(
-                SerializersConstants.PRODUCTS_REQUIRED.value,
-            )
-        return product
+        super().__init__(*args, **kwargs)
 
-    def operation_type(self):
-        operation = self.context.get("request").query_params.get("operation") or None
-        if operation is None:
-            raise exceptions.NotFound(
-                SerializersConstants.OPERATION_REQUIRED.value,
-            )
-        return operation
+        if fields is not None:
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+
+class RequiredParams(serializers.Serializer):
+    product = serializers.CharField(
+        required=True,
+        allow_null=False,
+    )
+    operation = serializers.ChoiceField(
+        choices=[i.value for i in OperationType],
+        required=True,
+    )
+
+    def validate(self, attrs):
+        try:
+            product = Product.objects.get(id=attrs["product"])
+        except Product.DoesNotExist:
+            raise serializers.ValidationError("Invalid product id")
+        attrs["product"] = product
+        return attrs
+
+
+class CustomModelSerializer(DynamicModelFieldSerializer):
 
     def update(self, instance, validated_data):
-        operation = self.operation_type()
+        serializer = RequiredParams(data=self.context.get("request").query_params)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        operation = data["operation"]
+        product = data["product"]
         if operation == OperationType.ADD.value:
-            product = self.get_product_from_query_params()
-            if isinstance(product, str):
-                product = eval(product)
-            instance.products.add(product)
+            instance.products.add(product.id)
             instance.save()
         elif operation == OperationType.REMOVE.value:
-            product = self.get_product_from_query_params()
-            if isinstance(product, str):
-                product = eval(product)
-            instance.products.remove(product)
+            instance.products.remove(product.id)
             instance.save()
         return instance
 
@@ -54,102 +58,73 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = "__all__"
+        fields = ["id", "title", "description"]
 
 
-class ProductImageSerializer(serializers.ModelSerializer):
+class ProductImageSerializer(DynamicModelFieldSerializer):
     class Meta:
         model = ProductImages
-        fields = "__all__"
+        fields = ["id", "image"]
 
 
-class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
+class ProductSerializerBase(DynamicModelFieldSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
-        fields = "__all__"
-
-    @staticmethod
-    def get_category_instance(id):
-        try:
-            return Category.objects.get(id=id)
-        except Category.DoesNotExist:
-            raise exceptions.NotFound(
-                SerializersConstants.CATEGORY_NOT_EXIST.value,
-            )
-
-    @staticmethod
-    def create_images_instances(images, instance):
-        try:
-            ProductImages.objects.bulk_create(
-                [ProductImages(product=instance, image=image) for image in eval(images)]
-            )
-        except Exception as err:
-            raise exceptions.APIException(err, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @staticmethod
-    def get_images_instances(product):
-        try:
-            return ProductImages.objects.filter(product__id=product.id)
-        except Exception as err:
-            raise exceptions.APIException(err, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def create(self, validated_data):
-        instance = Product(**validated_data)
-        category = self.get_category_instance(self.initial_data.get("category", None))
-        instance.category = category
-        if self.initial_data.get("images"):
-            instance.save()
-            self.create_images_instances(self.initial_data.get("images"), instance)
-            return instance
-        raise exceptions.APIException(
-            SerializersConstants.IMAGES_REQUIRED.value, status.HTTP_400_BAD_REQUEST
-        )
-
-    def update(self, instance, validated_data):
-        if self.initial_data.get("category"):
-            instance.category = self.get_category_instance(
-                id=self.initial_data.get("category")
-            )
-        if self.initial_data.get("images"):
-            instance.images.all().delete()
-            self.create_images_instances(self.initial_data.get("images"), instance)
-        return super().update(instance, validated_data)
+        fields = ["id", "title", "description", "images"]
 
 
-class OrderSerializer(CustomModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
+class ProductSerializer(ProductSerializerBase):
 
     class Meta:
-        model = Order
-        read_only_fields = [
+        model = Product
+        fields = [
             "id",
-            "user",
-            "get_total_price",
-            "get_total_tax",
-            "get_grand_total",
+            "title",
+            "description",
+            "price",
+            "stock",
+            "category",
+            "images",
+            "created",
         ]
-        fields = "__all__"
+        depth = True
 
     def create(self, validated_data):
-        products = self.get_products_initial_data()
-
-        order = Order.objects.create(id=uuid4(), user=self.context["request"].user)
-        try:
-            order.products.add(*products)
-            order.save()
-            return order
-        except IntegrityError:
-            order.delete()
-            raise exceptions.NotFound(
-                SerializersConstants.PRODUCT_NOT_EXIST.value,
+        instance = super().create(validated_data)
+        images = self.initial_data.get("images")
+        if images:
+            images = eval(images) if isinstance(images, str) else images
+            serializer = ProductImageSerializer(
+                data=[{"product": instance.id, "image": i} for i in images],
+                many=True,
             )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        images = self.initial_data.get("images")
+        if images:
+            images = eval(images) if isinstance(images, str) else images
+            for image_data in images:
+                try:
+                    image = ProductImages.objects.get(id=image_data["id"])
+                    serializer = ProductImageSerializer(image, data=image_data)
+                except ProductImages.DoesNotExist:
+                    serializer = ProductImageSerializer(
+                        data={"product": instance.id, "image": image_data["image"]}
+                    )
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+        return instance
 
 
 class CartSerializer(CustomModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
+    products = ProductSerializerBase(many=True, read_only=True)
+    user = BaseCartWishlistUserSerializer(read_only=True)
 
     class Meta:
         model = Cart
@@ -169,22 +144,12 @@ class CartSerializer(CustomModelSerializer):
             "get_grand_total",
             "products",
         ]
-
-    def create(self, validated_data):
-        products = self.get_products_initial_data()
-        cart = Cart.objects.get(user=self.context["request"].user)
-        try:
-            cart.products.add(*products)
-            cart.save()
-            return cart
-        except IntegrityError:
-            raise exceptions.NotFound(
-                SerializersConstants.PRODUCT_NOT_EXIST.value,
-            )
+        extra_kwargs = {"products": {}}
 
 
 class WishlistSerializer(CustomModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
+    products = ProductSerializerBase(many=True, read_only=True)
+    user = BaseCartWishlistUserSerializer(read_only=True)
 
     class Meta:
         model = Wishlist
@@ -204,15 +169,4 @@ class WishlistSerializer(CustomModelSerializer):
             "get_grand_total",
             "products",
         ]
-
-    def create(self, validated_data):
-        products = self.get_products_initial_data()
-        wishlist = Wishlist.objects.get(user=self.context["request"].user)
-        try:
-            wishlist.products.add(*products)
-            wishlist.save()
-            return wishlist
-        except IntegrityError:
-            raise exceptions.NotFound(
-                SerializersConstants.PRODUCT_NOT_EXIST.value,
-            )
+        depth = 1

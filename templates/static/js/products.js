@@ -1,5 +1,6 @@
 /*Products Request Handling */
 function loadProducts(content) {
+  console.log(content);
   loadPagination(content);
   if (content.count > 0) {
     content.results.forEach((elem) => {

@@ -1,0 +1,22 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quick Docs DRF</title>
+    {% block css %}{% endblock %}
+</head>
+
+<body data-bs-theme="light" data-theme="dark">
+    {% csrf_token %}
+    {% block content %}
+    {% endblock content %}
+</body>
+<script src="{% static 'js/jQuery.js' %}"></script>
+<script src="{% static 'js/docs-requests.js' %}"></script>
+<script src="{% static 'js/docs-utils.js' %}"></script>
+{% block js %}{% endblock %}
+
+</html>

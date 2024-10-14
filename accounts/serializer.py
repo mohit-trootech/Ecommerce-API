@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User
+from django.contrib.auth.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,15 +11,15 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "get_full_name",
-            "phone",
-            "address",
-            "age",
-            "gender",
             "username",
             "email",
-            "is_active",
-            "is_staff",
-            "is_superuser",
             "last_login",
             "date_joined",
         ]
+
+
+class BaseCartWishlistUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "get_full_name"]

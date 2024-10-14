@@ -2,6 +2,13 @@ from django.contrib.sessions.models import Session
 from django.utils.timezone import now
 from utils.constants import CATEGORY_GET, CustomExceptionMessages
 from utils.exceptions import CategoryNotFound
+from rest_framework.pagination import PageNumberPagination
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 4
+    page_size_query_param = "page_size"
+    max_page_size = 1000
 
 
 def force_logout(request):

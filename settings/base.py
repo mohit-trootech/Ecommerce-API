@@ -5,7 +5,6 @@ from utils.constants import Settings, EmailConfig
 import dj_database_url
 
 config = dotenv_values(".env")
-AUTH_USER_MODEL = "accounts.User"
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config["SECRET_KEY"]
 ROOT_URLCONF = Settings.ROOT_URL.value
@@ -29,6 +28,7 @@ INSTALLED_APPS = [
     "schema_graph",
     "phonenumber_field",
     "django_ui_forms",
+    "quick_docs_drf",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -171,7 +171,6 @@ CACHES = {
 # https://www.django-rest-framework.org/
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
-    "PAGE_SIZE": 4,
 }
 
 
@@ -185,3 +184,29 @@ class CustomFormRenderer(TemplatesSetting):
 
 
 FORM_RENDERER = "settings.base.CustomFormRenderer"
+
+# Quick Docs DRF Configuration
+QUICK_DOCS_DRF = {
+    "TITLE": "Ecommerce",
+    "DESCRIPTION": "django Restful Ecommerce API.",
+    "VERSION": "1.0.0",
+    "AUTHOR": "Mohit Prajapat",
+    "AUTHOR_EMAIL": "mohit.prajapat@trootech.com",
+    "API_URL": "/api/",
+    "BASE_URL": "ecommerce.urls",
+    "BASE_ROUTER_NAME": "ecommerce.urls.routers",
+    "VIEWSET_LISTS": [
+        "ecommerce.views.ProductViewSet",
+        "ecommerce.views.CategoryViewSet",
+        "ecommerce.views.CartViewSet",
+        "ecommerce.views.WishlistViewSet",
+    ],
+    # "TEMPLATE_STYLE": "tailwind",
+    "SOCIAL_MEDIA": {
+        "FACEBOOK": "itsmohit.codes",
+        "INSTAGRAM": "itsmohit.codes",
+        "GITHUB": "mohit-trootech",
+        "LINKEDIN": "mohitprajapat2001",
+        "X": "itsmohit.codes",
+    },
+}

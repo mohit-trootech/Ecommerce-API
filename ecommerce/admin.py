@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cart, Wishlist, Category, Product, ProductImages, Order
+from .models import Cart, Wishlist, Category, Product, ProductImages
 
 
 class ProductImagesInline(admin.TabularInline):
@@ -7,7 +7,7 @@ class ProductImagesInline(admin.TabularInline):
     extra = 1
 
 
-admin.register(ProductImages)
+admin.site.register(ProductImages)
 
 
 @admin.register(Product)
@@ -91,46 +91,6 @@ class WishlistAdmin(admin.ModelAdmin):
                     "id",
                     "user",
                     "products",
-                ),
-            },
-        ),
-        (
-            "Meta Data",
-            {
-                "fields": (
-                    "get_total_price",
-                    "get_total_tax",
-                    "get_grand_total",
-                ),
-            },
-        ),
-    )
-    filter_horizontal = ("products",)
-
-
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    readonly_fields = [
-        "id",
-        "created",
-        "modified",
-        "get_total_price",
-        "get_total_tax",
-        "get_grand_total",
-    ]
-    list_display = ("id", "user", "created", "get_grand_total")
-    search_fields = ("id",)
-    list_filter = ["created"]
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "id",
-                    "user",
-                    "products",
-                    "created",
-                    "modified",
                 ),
             },
         ),

@@ -69,17 +69,6 @@
                         </ul>
                     </details>
                 </li>
-                <li>
-                    <details close>
-                        <summary>Order</summary>
-                        <ul>
-                            <li><a href="#orders">Get All Order</a></li>
-                            <li><a href="#create-order">Create Order</a></li>
-                            <li><a href="#order">Retreive Order</a></li>
-                            <li><a href="#update-order">Update Order</a></li>
-                        </ul>
-                    </details>
-                </li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#contributions">Contributions</a></li>
                 <li><a href="#license">License</a></li>
@@ -299,19 +288,6 @@
                     <h2 class="text-xl font-semibold my-5">Remove Product from Wishlist</h2>
                     <code class="kbd">PATCH: PATCH /api/wishlists/{user}/?product={id}&operation=remove</code>
                     <p class="my-5">Removes a product with {id} from the specified wishlist.</p>
-                </section>
-
-                <section id="orders" class="mb-5">
-                    <h2 class="text-2xl font-semibold my-5">Order API Endpoints</h2>
-                    <p class="text-xl font-semibold my-5">Get All Orders</p>
-                    <code class="kbd">GET: /api/orders/</code>
-                    <p class="my-5">Fetch all orders associated with the authenticated user.</p>
-                </section>
-
-                <section id="order" class="mb-5">
-                    <h2 class="text-xl font-semibold my-5">Retrieve Order</h2>
-                    <code class="kbd">GET: /api/orders/{id}</code>
-                    <p class="my-5">Replace {id} with the actual order ID to retrieve its details.</p>
                 </section>
 
                 <section id="contact" class="mb-5">

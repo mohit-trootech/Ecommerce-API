@@ -5,15 +5,12 @@ from django.forms import (
     TextInput,
     CharField,
     PasswordInput,
-    NumberInput,
     EmailInput,
-    ClearableFileInput,
 )
-from accounts.models import User
+from django.contrib.auth.models import User
 from utils.constants import (
     FORM_LABELS,
     FORM_CLASS,
-    FORM_CLASS_FILE,
 )
 
 

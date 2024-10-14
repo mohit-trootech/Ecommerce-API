@@ -1,22 +1,21 @@
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
-from rest_framework import viewsets, mixins, pagination
-from ecommerce.models import Product, Category, Cart, Wishlist, Order
+from rest_framework import viewsets, mixins
+from ecommerce.models import Product, Category, Cart, Wishlist
 from ecommerce.serializer import (
     ProductSerializer,
     CategorySerializer,
     CartSerializer,
     WishlistSerializer,
-    OrderSerializer,
 )
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from utils.constants import EMPTY_STR, Templates
 from django.views.generic import TemplateView
-from accounts.models import User
+from django.contrib.auth.models import User
 from typing import Any
-from utils.utils import get_repository_star, get_api_stats
+from utils.utils import get_repository_star, get_api_stats, StandardResultsSetPagination
 from django.db.models import Q
 from django.contrib.messages import info
 
@@ -56,34 +55,19 @@ class TermsView(TemplateView):
 terms_view = TermsView.as_view()
 
 
-class CustomUserFilterViewSet(
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet,
-):
-
-    def get_queryset(self):
-        user = self.request.query_params.get("user") or None
-        if user is None:
-            return super().get_queryset()
-        return self._model_name.objects.filter(user__username=user)
-
-
 @method_decorator(csrf_exempt, name="dispatch")
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    pagination_class = pagination.PageNumberPagination
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         filter_params = self.request.query_params
 
         query = Q()
         if filter_params.get("category"):
-            query = query | Q(category__title=filter_params.get("category"))
+            query = query & Q(category__title=filter_params.get("category"))
         return (
             super()
             .get_queryset()
@@ -102,25 +86,24 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-class CartViewSet(CustomUserFilterViewSet):
+class CartViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    _model_name = Cart
     lookup_field = "user__username"
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-class WishlistViewSet(CustomUserFilterViewSet):
+class WishlistViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = Wishlist.objects.all()
     serializer_class = WishlistSerializer
-    _model_name = Wishlist
     lookup_field = "user__username"
-
-
-@method_decorator(csrf_exempt, name="dispatch")
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-    _model_name = Order
-    lookup_field = "user__username"
-    permission_classes = [IsAuthenticatedOrReadOnly]

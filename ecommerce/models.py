@@ -1,20 +1,14 @@
-from typing import Any
 from django.db import models
 from django_extensions.db.models import (
     TimeStampedModel,
     TitleDescriptionModel,
     ActivatorModel,
 )
-from uuid import uuid4
-
-
-def _upload_to_path(self, file):
-    return "products/images/{self.id}/{file}".format(self=self, file=file)
 
 
 class CartWishlistAbstract(models.Model):
     user = models.OneToOneField(
-        "accounts.User", on_delete=models.CASCADE, related_name="%(class)s"
+        "auth.User", on_delete=models.CASCADE, related_name="%(class)s"
     )
     products = models.ManyToManyField(
         "Product", blank=True, related_name="%(class)s_items"
@@ -83,16 +77,6 @@ class ProductImages(models.Model):
         Product, on_delete=models.CASCADE, related_name="images"
     )
     image = models.URLField(max_length=1024)
-
-
-class Order(CartWishlistAbstract, TimeStampedModel):
-    id = models.UUIDField(primary_key=True, unique=True, default=uuid4())
-    user = models.ForeignKey(
-        "accounts.User", on_delete=models.CASCADE, related_name="orders"
-    )
-
-    def __str__(self):
-        return "{user}'s Order".format(user=self.user.username).capitalize()
 
 
 class ApiStats(models.Model):

@@ -9,29 +9,31 @@ from ecommerce.views import (
     CategoryViewSet,
     CartViewSet,
     WishlistViewSet,
-    OrderViewSet,
     index_view,
     about_view,
     terms_view,
 )
 from accounts.views import UserViewSet
-
+from quick_docs_drf.urls import quick_docs_urls
 
 routers = DefaultRouter()
 routers.register("products", ProductViewSet)
 routers.register("categories", CategoryViewSet)
 routers.register("cart", CartViewSet)
 routers.register("wishlist", WishlistViewSet)
-routers.register("order", OrderViewSet)
 routers.register("user", UserViewSet)
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", index_view, name=Urls.HOME.value),
-    path("about/", about_view, name=Urls.ABOUT.value),
-    path("terms/", terms_view, name=Urls.TERMS.value),
-    path("accounts/", include("accounts.urls")),
-    path("store/", include("store.urls")),
-    path("schema", Schema.as_view(), name=Urls.SCHEMA_REVERSE.value),
-    path("api/", include(routers.urls), name=Urls.API_REVERSE.value),
-] + debug_toolbar_urls()
+urlpatterns = (
+    [
+        path("admin/", admin.site.urls),
+        path("", index_view, name=Urls.HOME.value),
+        path("about/", about_view, name=Urls.ABOUT.value),
+        path("terms/", terms_view, name=Urls.TERMS.value),
+        path("accounts/", include("accounts.urls")),
+        path("store/", include("store.urls")),
+        path("schema", Schema.as_view(), name=Urls.SCHEMA_REVERSE.value),
+        path("api/", include(routers.urls), name=Urls.API_REVERSE.value),
+    ]
+    + debug_toolbar_urls()
+    + quick_docs_urls
+)

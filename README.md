@@ -22,9 +22,6 @@ This API is built with Django and Django REST Framework (DRF) to provide a robus
   
 - **Wishlist Management**:
   - Add, remove, and view items in the wishlist.
-  
-- **Order Management**:
-  - Place orders and view order history.
 
 ## Installation
 
@@ -120,11 +117,6 @@ python manage.py runserver
   - `GET /api/wishlist/` - View wishlist
   - `POST /api/wishlist/` - Add item to wishlist
   - `POST /api/wishlist/{id}/` - Remove item from wishlist
-
-- **Order Management**
-  - `GET /api/orders/` - View all orders
-  - `POST /api/orders/` - Place a new order
-  - `GET /api/orders/{id}/` - Retrieve a specific order
 
 ## Contributions
 

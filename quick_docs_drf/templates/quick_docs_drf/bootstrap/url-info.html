@@ -1,0 +1,67 @@
+<div class="accordion" id="{{content.app_name}}-{{app}}">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#{{content.app_name}}-{{app}}-one" aria-expanded="true"
+                aria-controls="{{content.app_name}}-{{app}}-one">
+                Parameter
+            </button>
+        </h2>
+        <div id="{{content.app_name}}-{{app}}-one" class="accordion-collapse collapse">
+            {% if app == "create" %}
+            <div class="alert text-bg-primary m-0 px-3 py-2 d-flex align-items-center justify-content-center m-3"
+                role="alert">
+                No parameters required
+            </div>
+            {% elif app == "list" %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if content.pagination %}
+                    <tr>
+                        <th scope="row">Page</th>
+                        <td>
+                            Required <span class="badge text-bg-primary">query</span>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            {% else %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">{{content.lookup_field}}</th>
+                        <td>
+                            Required <span class="badge text-bg-primary">query</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#{{content.app_name}}-{{app}}-two" aria-expanded="false"
+                aria-controls="{{content.app_name}}-{{app}}-two">
+                Responses
+            </button>
+        </h2>
+        <div id="{{content.app_name}}-{{app}}-two" class="accordion-collapse collapse">
+            {% include 'quick_docs_drf/bootstrap/response.html' %}
+        </div>
+    </div>
+</div>
