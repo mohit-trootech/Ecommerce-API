@@ -37,7 +37,7 @@ class RequiredParams(serializers.Serializer):
         return attrs
 
 
-class CustomModelSerializer(DynamicModelFieldSerializer):
+class CartWishlistAbstractSerializer(DynamicModelFieldSerializer):
 
     def update(self, instance, validated_data):
         serializer = RequiredParams(data=self.context.get("request").query_params)
@@ -67,7 +67,7 @@ class ProductImageSerializer(DynamicModelFieldSerializer):
         fields = ["id", "image"]
 
 
-class ProductSerializerBase(DynamicModelFieldSerializer):
+class ProductBaseSerializer(DynamicModelFieldSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
 
     class Meta:
@@ -75,7 +75,7 @@ class ProductSerializerBase(DynamicModelFieldSerializer):
         fields = ["id", "title", "description", "images"]
 
 
-class ProductSerializer(ProductSerializerBase):
+class ProductSerializer(ProductBaseSerializer):
 
     class Meta:
         model = Product
@@ -122,8 +122,8 @@ class ProductSerializer(ProductSerializerBase):
         return instance
 
 
-class CartSerializer(CustomModelSerializer):
-    products = ProductSerializerBase(many=True, read_only=True)
+class CartSerializer(CartWishlistAbstractSerializer):
+    products = ProductBaseSerializer(many=True, read_only=True)
     user = BaseCartWishlistUserSerializer(read_only=True)
 
     class Meta:
@@ -147,8 +147,8 @@ class CartSerializer(CustomModelSerializer):
         extra_kwargs = {"products": {}}
 
 
-class WishlistSerializer(CustomModelSerializer):
-    products = ProductSerializerBase(many=True, read_only=True)
+class WishlistSerializer(CartWishlistAbstractSerializer):
+    products = ProductBaseSerializer(many=True, read_only=True)
     user = BaseCartWishlistUserSerializer(read_only=True)
 
     class Meta:
