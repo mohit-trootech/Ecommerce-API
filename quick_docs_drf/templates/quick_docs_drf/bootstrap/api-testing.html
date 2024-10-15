@@ -1,0 +1,39 @@
+<div class="position-fixed bottom-0 end-0 m-3">
+    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#apiTestModal">
+        Test API
+    </button>
+</div>
+<div class="modal fade" id="apiTestModal" tabindex="-1" aria-labelledby="apiTestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="apiTestModalLabel">Test API Now!</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="spinner-grow spinner-grow-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div>
+                            <input type="email" class="form-control form-control-sm"
+                                placeholder="Enter API relative url - /api/" id="api-url">
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadAPI()">RUN</button>
+                    </div>
+                    <div style="white-space: pre-wrap;" class="card-body overflow-y-auto" id="api-result">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="alert-toast" class="position-fixed top-0 end-0 m-3">
+</div>

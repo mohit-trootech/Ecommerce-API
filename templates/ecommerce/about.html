@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <header class="text-center mb-6">
+        <h1 class="text-4xl font-bold">API Documentation</h1>
+        <p class="my-5 text-lg">Learn how to interact with the Ecommerce Store</p>
+    </header>
+    <div class="diff rounded my-10">
+        <div class="diff-item-1">
+            <div class="bg-primary text-primary-content grid place-content-center font-black">
+                Note: Ecommerce API required Authentication to request data check request for more details.
+            </div>
+        </div>
+        <div class="diff-item-2">
+            <div class="bg-base-200 grid place-content-center font-black">
+                Note: Ecommerce API required Authentication to request data check request for more details.
+            </div>
+        </div>
+        <div class="diff-resizer"></div>
+    </div>
+    <div class="grid grid-cols-9 gap-4 my-10 mx-auto mx-5">
+        <div class="col-span-2 py-5 h-max sticky top-0">
+            <ul class="menu bg-base-200 rounded-box w-56">
+                <li><a href="#introduction">Introduction</a></li>
+                <li>
+                    <details open>
+                        <summary>Products</summary>
+                        <ul>
+                            <li><a href="#products">Get All Products</a></li>
+                            <li><a href="#pagination">Pagination</a></li>
+                            <li><a href="#sorting">Sort Products</a></li>
+                            <li><a href="#filtering">Filter by Category</a></li>
+                            <li><a href="#product">Retrieve Product</a></li>
+                            <li><a href="#create-product">Add Product</a></li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details close>
+                        <summary>Category</summary>
+                        <ul>
+                            <li><a href="#categories">Get All Categories</a></li>
+                            <li><a href="#category">Retreive Category</a></li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details close>
+                        <summary>Cart</summary>
+                        <ul>
+                            <li><a href="#carts">Get All Carts</a></li>
+                            <li><a href="#cart">Retreive Cart</a></li>
+                            <li><a href="#cart-product-create">Add Product</a></li>
+                            <li><a href="#cart-product-remove">Remove Product</a></li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details close>
+                        <summary>Wishlist</summary>
+                        <ul>
+                            <li><a href="#wishlists">Get All Wishlists</a></li>
+                            <li><a href="#wishlist">Retreive Wishlist</a></li>
+                            <li><a href="#wishlist-product-create">Add Product</a></li>
+                            <li><a href="#wishlist-product-remove">Remove Product</a></li>
+                        </ul>
+                    </details>
+                </li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#contributions">Contributions</a></li>
+                <li><a href="#license">License</a></li>
+            </ul>
+        </div>
+        <div class="col-span-7 p-4">
+            <section id="introduction" class="mb-5">
+                <h2 class="text-2xl font-semibold my-5">Using the API</h2>
+                <p class="my-5">Here’s how to use the Todos API in different programming
+                    languages:
+                </p>
+            </section>
+            <section id="products" class="mb-5">
+                <h2 class="text-2xl font-semibold my-5">Products API Endpoints</h2>
+                <p class="text-xl font-semibold my-5">Get All Products</p>
+                <div role="tablist" class="tabs tabs-boxed">
+                    <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Fetch" />
+                    <div role="tabpanel" class="tab-content p-10">
+                        <div class="mockup-window w-11/12 bg-base-300 border">
+                            <div class="bg-base-200 px-4 py-16">
+                                <div class="mockup-code overflow-auto">
+                                    <pre><code>let headers = new Headers();
+    headers.append('Authorization', 
+        'Basic ' + base64.encode(username + ":" + password));
+    fetch('/api/products/', {method:'GET',
+    headers: headers,
+    })
+    .then((response) => response.json())
+    .then((json) => console.log(json));
+                                        </code></pre>
+                                </div>
+                                <br>
+                                <div class="mockup-code  overflow-auto">
+                                    <pre data-prefix="#"><code>Response</code></pre>
+                                    {% include 'ecommerce/products-pre/products.html' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Ajax" />
+                    <div role="tabpanel" class="tab-content p-10">
+                        <div class="mockup-window w-11/12 bg-base-300 border">
+                            <div class="bg-base-200 px-4 py-16">
+                                <div class="mockup-code overflow-auto">
+                                    <pre><code>$.ajax({
+    url: "/api/products/",
+    type: "GET",
+    headers: {
+        "X-CSRFToken": csrfToken,
+        Authorization: "Basic " + btoa(USERNAME + ":" + PASSWORD),
+    },
+    success: function (response, status, xhr) {
+        console.log(response);
+    },
+    error: function (xhr, status, error) {
+        console.error("Error occurred:", xhr.responseText, status, error);
+    },
+    });
+                                                    </code></pre>
+                                </div>
+                                <br>
+                                <div class="mockup-code overflow-auto">
+                                    <pre data-prefix="#"><code>Response</code></pre>
+                                    {% include 'ecommerce/products-pre/products.html' %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Python" />
+                    <div role="tabpanel" class="tab-content p-10">
+                        <div class="mockup-window w-11/12 bg-base-300 border">
+                            <div class="bg-base-200 px-4 py-16">
+                                <div class="mockup-code overflow-auto">
+                                    <pre><code>from requests import get
+    response = get("http://url.domain/api/products/", 
+        auth=(USERNAME, PASSWORD))
+    print(response.status_code)
+    print(response.json())
+                                                                </code></pre>
+                                </div>
+                                <br>
+                                <div class="mockup-code overflow-auto">
+                                    <pre data-prefix="#"><code>Response</code></pre>
+                                    {% include 'ecommerce/products-pre/products.html' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="pagination" class="mb-5">
+                <h2 class="text-2xl font-semibold my-5">Pagination</h2>
+                <p class="my-5">Products data are paginated & can be handled by sending page number as query parameter
+                </p>
+                <p class="kbd">GET: /api/products/?page={number}</p>
+                <p class="my-5">This will fetch the first page of products, limited to 10 items.</p>
+            </section>
+            <section id="sorting" class="mb-5">
+                <h2 class="text-2xl font-semibold my-5">Sorting</h2>
+                <p class="my-5">Currently Products can be Filter on the Basis of Category & Time Created
+                </p>
+                <p class="kbd">GET: /api/products/?page={number}&orderby={<select class="select select-xs max-w-xs">
+                        <option selected>created</option>
+                        <option>-created</option>
+                        <option>?</option>
+                    </select>}</p>
+                <ul>
+                    <li>
+
+                    </li>
+                </ul>
+            </section>
+            <section id="filtering" class="mb-5">
+                <h2 class="text-2xl font-semibold my-5">Category</h2>
+                <p class="my-5">Products can also be Filter on the Basis of Category</p>
+                <p class="kbd">GET: /api/products/?page={number}&orderby={<select class="select select-xs max-w-xs">
+                        <option selected>created</option>
+                        <option>-created</option>
+                        <option>?</option>
+                    </select>}&category={category} </p>
+            </section>
+            <section id="product" class="mb-5">
+                <h2 class="text-2xl font-semibold my-5">Retreive Product</h2>
+                <p class="my-5">One Product can be retreive by ID</p>
+                <p class="kbd">GET: /api/products/{id} </p>
+                <p class="my-5">Replace {id} with the actual product ID.</p>
+            </section>
+            <section id="create-product" class="mb-5">
+                <h2 class="text-2xl font-semibold my-5">Create Product</h2>
+                <p class="my-5">A Product can be created with a POST request.</p>
+                <p class="kbd">POST: /api/products/</p>
+                <div class="mockup-code my-5">
+                    <pre data-prefix="$"><code>
+    function newFormData(form) {
+        const title = form[0].value;
+        const description = form[1].value;
+        const price = form[2].value;
+        const stock = form[3].value;
+        const category = form[4].value;
+        const image1 = form[5].value;
+        const image2 = form[6].value;
+        const image3 = form[7].value;
+        const image4 = form[8].value;
+        const images = JSON.stringify([image1, image2, image3, image4]);
+        return {
+                title: title,
+                description: description,
+                price: price,
+                stock: stock,
+                category: category,
+                images: images,
+                };
+            }
+                    </code></pre>
+                </div>
+                <section id="categories" class="mb-5">
+                    <h2 class="text-2xl font-semibold my-5">Categories API Endpoints</h2>
+                    <p class="text-xl font-semibold my-5">Get All Categories</p>
+                    <code class="kbd">GET: /api/categories/</code>
+                    <p class="my-5">This fetches all product categories available in the store.</p>
+                </section>
+
+                <section id="category" class="mb-5">
+                    <h2 class="text-xl font-semibold my-5">Retrieve Category</h2>
+                    <code class="kbd">GET: /api/categories/{id}</code>
+                    <p class="my-5">Replace {id} with the actual category ID to retrieve its details.</p>
+                </section>
+
+                <section id="carts" class="mb-5">
+                    <h2 class="text-2xl font-semibold my-5">Cart API Endpoints</h2>
+                    <p class="text-xl font-semibold my-5">Get All Carts</p>
+                    <code class="kbd">GET: /api/carts/</code>
+                    <p class="my-5">Fetch all carts associated with the authenticated user.</p>
+                </section>
+
+                <section id="cart" class="mb-5">
+                    <h2 class="text-xl font-semibold my-5">Retrieve Cart</h2>
+                    <code class="kbd">GET: /api/carts/{user}</code>
+                    <p class="my-5">Replace {user} with the actual cart user to retrieve its contents.</p>
+                </section>
+
+                <section id="cart-product-create" class="mb-5">
+                    <h2 class="text-xl font-semibold my-5">Add Product to Cart</h2>
+                    <code class="kbd">PATCH: /api/cart/{user}/?product=${elem.id}&operation=add</code>
+                    <p class="my-5">Adds a specified product with {id} to the cart.</p>
+                </section>
+
+                <section id="cart-product-remove" class="mb-5">
+                    <h2 class="text-xl font-semibold my-5">Remove Product from Cart</h2>
+                    <code class="kbd">PATCH: /api/cart/{user}/?product={id}&operation=remove</code></pre>
+                    <p class="my-5">Removes a product {id} from the specified cart.</p>
+                </section>
+
+                <section id="wishlists" class="mb-5">
+                    <h2 class="text-2xl font-semibold my-5">Wishlist API Endpoints</h2>
+                    <p class="text-xl font-semibold my-5">Get All Wishlists</p>
+                    <code class="kbd">GET: /api/wishlists/</code></pre>
+                    <p class="my-5">Fetch all wishlists associated with the authenticated user.</p>
+                </section>
+
+                <section id="wishlist" class="mb-5">
+                    <h2 class="text-xl font-semibold my-5">Retrieve Wishlist</h2>
+                    <code class="kbd">GET: /api/wishlists/{user}</code>
+                    <p class="my-5">Replace {user} with the actual wishlist USER to retrieve its contents.</p>
+                </section>
+
+                <section id="wishlist-product-create" class="mb-5">
+                    <h2 class="text-xl font-semibold my-5">Add Product to Wishlist</h2>
+                    <code class="kbd">PATCH: /api/wishlists/{user}/?product={id}&operation=add</code>
+                    <p class="my-5">Adds a specified product with {id} to the wishlist.</p>
+                </section>
+
+                <section id="wishlist-product-remove" class="mb-5">
+                    <h2 class="text-xl font-semibold my-5">Remove Product from Wishlist</h2>
+                    <code class="kbd">PATCH: PATCH /api/wishlists/{user}/?product={id}&operation=remove</code>
+                    <p class="my-5">Removes a product with {id} from the specified wishlist.</p>
+                </section>
+
+                <section id="contact" class="mb-5">
+                    <h2 class="text-2xl font-semibold my-5">Contact</h2>
+                    <p class="my-5">For any questions, please reach out to our support team at <a
+                            href="mailto:support@ecommerce.com">support@ecommerce.com</a>.</p>
+                </section>
+
+                <section id="contributions" class="mb-5">
+                    <h2 class="text-2xl font-semibold my-5">Contributions</h2>
+                    <p class="my-5">We welcome contributions! Please check our GitHub repository for more information.
+                    </p>
+                </section>
+
+                <section id="license" class="mb-5">
+                    <h2 class="text-2xl font-semibold my-5">License</h2>
+                    <p class="my-5">This API is licensed under the MIT License. See the LICENSE file for more details.
+                    </p>
+                </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

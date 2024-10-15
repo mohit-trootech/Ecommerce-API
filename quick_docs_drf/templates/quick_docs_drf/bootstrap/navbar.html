@@ -1,0 +1,41 @@
+<!-- As a link -->
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <button class="navbar-toggler d-lg-none d-md-none d-sm-block" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#documentationMenu" aria-controls="documentationMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-brand" href="#">{{project_name}}</div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" style="height: 1.5rem;width:3rem " type="checkbox" role="switch" id="theme"
+                checked>
+        </div>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-top">
+    <div class="container-fluid justify-content-center align-items-center justify-content-md-between">
+        <p class="text-muted mb-1 mt-1 mx-3">{{project_description}}</p>
+    </div>
+</nav>
+<nav class="navbar bg-body-tertiary border-bottom">
+    <div class="d-flex justify-content-between align-items-center">
+        {%if project_version%}
+        <span class="badge text-bg-info ms-3">{{project_version}}
+        </span>
+        {%endif%}
+        {%if project_author%}
+        <span class="badge text-bg-info ms-3">{{project_author}}
+        </span>
+        {%endif%}
+        {%if api_url%}
+        <span class="badge text-bg-info ms-3">{{api_url}}
+        </span>
+        {%endif%}
+    </div>
+    <button class="btn btn-outline-primary btn-sm d-flex text-capitalize justify-content-end align-items-center me-3"
+        data-bs-toggle="modal" data-bs-target="#authorizeModal" id="authorizeModalButton">
+        Authorize
+    </button>
+</nav>
+{% include 'quick_docs_drf/bootstrap/authorize-modal.html' %}
