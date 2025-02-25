@@ -1,0 +1,77 @@
+<table class="table">
+    <tbody>
+        <tr>
+            <th scope="row">Code</th>
+            <td>
+                {% if app == 'list' %}
+                200
+                {% elif app == 'create' %}
+                201
+                {% elif app == 'retrieve' %}
+                200
+                {% elif app == 'update' %}
+                200
+                {% elif app == 'partial_update' %}
+                200
+                {% elif app == 'destroy' %}
+                204
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Description</th>
+            <td>
+                {% if app == 'list' %}
+                Success
+                {% elif app == 'create' %}
+                Created
+                {% elif app == 'retrieve' %}
+                Success
+                {% elif app == 'update' %}
+                Success
+                {% elif app == 'partial_update' %}
+                Success
+                {% elif app == 'destroy' %}
+                No Content
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Data</th>
+            <td>
+                {% if app == 'list' %}
+                {% if content.pagination %}
+                <pre style="white-space: pre-wrap;" class="code lh-1 fw-light">
+{
+    "count": 123,
+    "next": "http://api.example.org/accounts/?page=4",
+    "previous": "http://api.example.org/accounts/?page=2",
+    "results": [
+    {
+{% for i in content.field_types.items%}
+        "{{i.0}}": "{{i.1}}",
+    {%endfor%}
+    }]
+}</pre>
+                {%else%}
+                <pre class="code lh-1 fw-light">
+{
+{% for i in content.field_types.items%}
+    "{{i.0}}": "{{i.1}}",
+{%endfor%}
+}</pre>
+                {%endif%}
+                {% elif app == 'destroy' %}
+                No response body
+                {% else %}
+                <pre class="code lh-1 fw-light">
+{
+{% for i in content.field_types.items%}
+    "{{i.0}}": "{{i.1}}",
+{%endfor%}
+}</pre>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,140 @@
+<div class="offcanvas-md offcanvas-end sticky-md-top" tabindex="-1" id="documentationMenu"
+    aria-labelledby="documentationMenuLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="documentationMenuLabel">{{project_name}} Endpoints</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#documentationMenu"
+            aria-label="Close"></button>
+    </div>
+    <div class="mt-3 overflow-auto" style="height: 100vh;scrollbar-width:none">
+        <div class="list-group list-group-flush">
+            <div class="accordion" id="accordionExample">
+                {% for context in menu_context %}
+                {% if context.app_name == "api-root" %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#{{forloop.counter}}"
+                            aria-controls="{{forloop.counter}}" aria-expanded="false">
+                            {{context.name}} Endpoints
+                        </button>
+                    </h2>
+                    <div id="{{forloop.counter}}"
+                        class="accordion-collapse collapse {% if forloop.first %}show{% endif %}">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                <a href="#{{context.app_name}}"
+                                    class="list-group-item list-group-item-action text-uppercase">
+                                    <span class="text-uppercase badge text-bg-primary">
+                                        GET
+                                    </span>
+                                    <code class="text-lowercase">{% url context.app_name %}</code>
+                                </a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {%else%}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button text-capitalize {% if not forloop.first %}collapsed{% endif %}"
+                            type="button" data-bs-toggle="collapse" data-bs-target="#{{forloop.counter}}"
+                            aria-controls="{{forloop.counter}}" aria-expanded="false">
+                            {{context.model}} - {{context.app_name}}
+                        </button>
+                    </h2>
+                    <div id="{{forloop.counter}}"
+                        class="accordion-collapse collapse {% if forloop.first %}show{% endif %}">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                {% for action in context.app_actions %}
+                                <a href="#{{context.app_name}}"
+                                    class="list-group-item list-group-item-action align-items-center text-uppercase">
+                                    {% if action == "list" %}
+                                    <code class="text-uppercase badge text-bg-primary">
+                                    GET
+                                    </code>
+                                    {% elif action == "create" %}
+                                    <code class="text-uppercase badge text-bg-success">
+                                    POST
+                                    </code>
+                                    {% elif action == "update" %}
+                                    <code class="text-uppercase badge text-bg-warning">
+                                    PUT
+                                    </code>
+                                    {% elif action == "partial_update" %}
+                                    <code class="text-uppercase badge text-bg-info">
+                                    PATCH
+                                    </code>
+                                    {% elif action == "retrieve" %}
+                                    <code class="text-uppercase badge text-bg-primary">
+                                    GET
+                                    </code>
+                                    {% elif action == "destroy" %}
+                                    <code class="text-uppercase badge text-bg-danger">
+                                    DELETE
+                                    </code>
+                                    {% endif %}
+                                    <span class="font-monospace fs-6 fw-light">{{action}}</span></a>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
+                {% endfor %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#extras" aria-controls="extras" aria-expanded="false">
+                            Extras
+                        </button>
+                    </h2>
+                    <div id="extras" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                {% if project_author_email %}
+                                <a class="list-group-item list-group-item-action text-uppercase" href="#contact">
+                                    Contact
+                                </a>
+                                {% endif %}
+                                {% if project_repository %}
+                                <a class="list-group-item border rounded list-group-item-action text-uppercase"
+                                    href="#contributions">
+                                    Contributions
+                                </a>
+                                {%endif%}
+                                {% if project_license %}
+                                <a class="list-group-item list-group-item-action text-uppercase" href="#license">
+                                    License
+                                </a>
+                                {%endif%}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% if viewset_context %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#viewsets" aria-controls="viewsets" aria-expanded="false">
+                            Available Viewsets Details
+                        </button>
+                    </h2>
+                    <div id="viewsets" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                {% for context in viewset_context%}
+                                <a href="#{{context.name}}"
+                                    class="list-group-item list-group-item-action text-uppercase">
+                                    {{context.name}}
+                                </a>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,179 @@
+<header class="text-start mb-6" id="introduction">
+    <h1 class="text-4xl font-bold">
+        {{project_name}}
+    </h1>
+    <p class="my-5 text-lg">{{project_description}}</p>
+    <p class="flex">
+        {%if project_version%}
+        <span class="badge badge-primary ms-3">{{project_version}}
+        </span>
+        {%endif%}
+        {%if project_author%}
+        <span class="badge badge-primary ms-3">{{project_author}}
+        </span>
+        {%endif%}
+        {%if api_url%}
+        <span class="badge badge-primary ms-3">{{api_url}}
+        </span>
+        {%endif%}
+    </p>
+</header>
+{% for context in viewset_context%}
+<div class="card mb-5 border shadow-xl" id="{{context.name}}">
+    <div class="card-body">
+        <h2 class="card-title">{{context.name}}</h2>
+        <p class="card-text">{{context.docs}}</p>
+        <div class="overflow-x-auto">
+            <table class="table">
+                <tbody class="">
+                    <tr class="hover">
+                        <th scope="row" class="text-capitalize">serailizer Class</th>
+                        {% if context.serializer_class %}
+                        <td>{{context.serializer_class}}</td>
+                        {% else %}
+                        <td>None</td>
+                        {%endif%}
+                    </tr>
+                    <tr class="hover">
+                        <th scope="row" class="text-capitalize">fields</th>
+                        {% if context.fields %}
+                        <td>{{context.fields}}</td>
+                        {% else %}
+                        <td>None</td>
+                        {%endif%}
+                    </tr>
+                    <tr class="hover">
+                        <th scope="row" class="text-capitalize">permission classes</th>
+                        {% if context.permission_classes %}
+                        <td>{{context.permission_classes}}</td>
+                        {% else %}
+                        <td>None</td>
+                        {%endif%}
+                    </tr>
+                    <tr class="hover">
+                        <th scope="row" class="text-capitalize">pagination class</th>
+                        {% if context.pagination_class %}
+                        <td>{{context.pagination_class}}</td>
+                        {% else %}
+                        <td>None</td>
+                        {%endif%}
+                    </tr>
+                    <tr class="hover">
+                        <th scope="row" class="text-capitalize">authentication classes</th>
+                        {% if context.authentication_classes %}
+                        <td>{{context.authentication_classes}}</td>
+                        {% else %}
+                        <td>None</td>
+                        {%endif%}
+                    </tr>
+                    <tr class="hover">
+                        <th scope="row" class="text-capitalize">lookup field</th>
+                        {% if context.lookup_field %}
+                        <td>{{context.lookup_field}}</td>
+                        {% else %}
+                        <td>None</td>
+                        {%endif%}
+                    </tr>
+                    <tr class="hover">
+                        <th scope="row" class="text-capitalize">renderer classes</th>
+                        {% if context.renderer_classes %}
+                        <td>{{context.renderer_classes}}</td>
+                        {% else %}
+                        <td>None</td>
+                        {%endif%}
+                    </tr>
+                    <tr class="hover">
+                        <th scope="row" class="text-capitalize">throttle classes</th>
+                        {% if context.throttle_classes %}
+                        <td>{{context.throttle_classes}}</td>
+                        {% else %}
+                        <td>None</td>
+                        {%endif%}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{%endfor%}
+{% for content in menu_context %}
+<div class="card mb-5 border shadow-xl" id="{{content.app_name}}">
+    {% if content.model %}
+    <div class="card-body">
+        <h2 class="card-title">{{content.model}}</h2>
+        <p class="card-text">{{content.docs}}</p>
+        <div>
+            <button type="button" class="btn btn-primary btn-sm me-2 capitalize copy-link-btn"
+                onclick="copyToClipboard(this)">
+                Copy Link
+            </button>
+            <code class="kbd text-secondary">
+                {% if "-detail" in content.app_name %}   
+                {% url content.app_name 1 %}
+                {%else%}
+                {% url content.app_name %}
+            {% endif %}
+            </code>
+
+        </div>
+        {%for action in content.app_actions%}
+        <p class="bg-base-300 p-3 rounded-md">{{action}}</p>
+        {%endfor%}
+    </div>
+    {% else %}
+    <div class="card-body">
+        <h2 class="card-title">{{content.name}}</h2>
+        <p class="card-text">{{content.docs}}</p>
+        <p>
+            <button type="button" class="btn btn-primary me-2 text-capitalize copy-link-btn"
+                onclick="copyToClipboard(this)">
+                Copy Link
+            </button>
+            <code class="kbd text-secondary">
+                {% if "-detail" in content.app_name %}  
+                {% url content.app_name 1 %}
+                {%else%}
+                {% url content.app_name %}
+            {% endif %}
+            </code>
+        </p>
+    </div>
+    {%endif%}
+</div>
+{%endfor%}
+{% if project_author_email %}
+<section id="contact" class="mb-5">
+    <h2 class="text-2xl font-semibold my-5">
+        Contact
+    </h2>
+    <p class="my-5">
+        For any questions, please reach out to our support team at
+        <a href="mailto:{{project_author_email}}">
+            <code class="kbd text-secondary">{{project_author_email}}</code>
+        </a>
+    </p>
+</section>
+{% endif %}
+{% if project_repository %}
+<section id="contributions" class="mb-5">
+    <h2 class="text-2xl font-semibold my-5">
+        Contributions
+    </h2>
+    <p class="my-5">
+        We welcome contributions! Please check our GitHub repository for more information.
+        <code class="kbd">
+{{project_repository}}
+        </code>
+    </p>
+</section>
+{%endif%}
+{% if project_license %}
+<section id="license" class="mb-5">
+    <h2 class="text-2xl font-semibold my-5">
+        License
+    </h2>
+    <p class="my-5">
+        This API is licensed under the {{project_license}} License. See the LICENSE file for more details.
+    </p>
+</section>
+{%endif%}

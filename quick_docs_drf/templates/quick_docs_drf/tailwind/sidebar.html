@@ -1,0 +1,90 @@
+<div class="drawer z-[999]">
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-side overflow-auto" style="scrollbar-width: none;">
+        <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+        <ul class="menu bg-base-200 min-h-screen rounded-box w-56">
+            <li><a href="#introduction">Introduction</a></li>
+            <li>
+                <details open>
+                    <summary>Available Viewsets</summary>
+                    <ul>
+                        {% if viewset_context %}
+                        {% for context in viewset_context%}
+                        <li><a href="#{{context.name}}" class="capitalize">{{context.name}} Viewset</a></li>
+                        {% endfor %}
+                        {% endif %}
+                    </ul>
+                </details>
+            </li>
+            {% for context in menu_context %}
+            {% if context.app_name == "api-root" %}
+            <li>
+                <details close>
+                    <summary>{{context.name}} Endpoints</summary>
+                    <ul>
+                        <li>
+                            <a href="#{{context.app_name}}">GET
+                                <code class="text-secondary kbd">
+                                {% url context.app_name %}
+                            </code>
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+            {%else%}
+            <li>
+                <details close>
+                    <summary>{{context.model}} - {{context.app_name}}</summary>
+                    <ul>
+                        {% for action in context.app_actions %}
+                        <li>
+                            <a href="#{{context.app_name}}"
+                                class="list-group-item list-group-item-action align-items-center text-uppercase">
+                                {% if action == "list" %}
+                                <code class="uppercase badge badge-primary">
+                                        GET
+                                    </code>
+                                {% elif action == "create" %}
+                                <code class="uppercase badge badge-accent">
+                                        POST
+                                    </code>
+                                {% elif action == "update" %}
+                                <code class="uppercase badge badge-warning">
+                                        PUT
+                                    </code>
+                                {% elif action == "partial_update" %}
+                                <code class="uppercase badge badge-info">
+                                        PATCH
+                                    </code>
+                                {% elif action == "retrieve" %}
+                                <code class="uppercase badge badge-primary">
+                                        GET
+                                    </code>
+                                {% elif action == "destroy" %}
+                                <code class="uppercase badge badge-error">
+                                        DELETE
+                                    </code>
+
+                                {% endif %}
+                                <span class="text-sm capitalize font-light">{{action}}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </details>
+            </li>
+            {%endif%}
+            {% endfor %}
+            {% if project_author_email %}
+            <li><a href="#contact">Contact</a></li>
+            {%endif%}
+            {% if project_repository %}
+            <li><a href="#contributions">Contributions</a></li>
+            {%endif%}
+            {% if project_license %}
+            <li><a href="#license">License</a></li>
+            {%endif%}
+        </ul>
+    </div>
+</div>

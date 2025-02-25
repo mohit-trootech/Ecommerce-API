@@ -1,0 +1,37 @@
+<div class="fixed bottom-0 right-0 m-10">
+    <button class="btn btn-primary btn-sm" onclick="my_modal_3.showModal()">
+        Test API
+    </button>
+</div>
+<!-- You can open the modal using ID.showModal() method -->
+<dialog id="my_modal_3" class="modal w-full">
+    <div class="modal-box w-11/12 max-w-4xl ">
+        <form method="dialog">
+            <button
+                class="btn btn-sm btn-circle btn-ghost absolute scale:95 hover:scale:100 transition hover:rotate-90 delay-50 duration-200 right-2 top-2">✕</button>
+        </form>
+        <h3 class="text-lg font-bold">Test API Now!</h3>
+        <p class="py-5">
+        <div class="mockup-browser bg-base-300 border">
+            <div class="mockup-browser-toolbar">
+                <label class="input input-bordered flex items-center gap-2">
+                    <input type="text" class="grow" placeholder="Enter API Relative URL - /api/" id="api-url" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                        class="h-4 w-4 opacity-70">
+                        <path fill-rule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </label>
+                <button class="btn btn-primary mx-3 btn-sm" onclick="loadAPI()">RUN</button>
+            </div>
+            <div class="flex justify-center px-4 py-16">
+                <div id="api-result" style="white-space: pre-wrap;">
+                    <span class="loading loading-dots text-secondary loading-lg"></span>
+                </div>
+            </div>
+        </div>
+        </p>
+    </div>
+</dialog>
+<div id="alert-toast"></div>

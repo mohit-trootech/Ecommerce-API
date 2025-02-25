@@ -1,0 +1,181 @@
+<div class="mt-3">
+    {% for context in viewset_context%}
+    <div class="card mb-3" id="{{context.name}}">
+        <h5 class="card-header fs-3">{{context.name}}</h5>
+        <div class="card-body">
+            <p class="card-text">{{context.docs}}</p>
+            <div class="table-responsive">
+                <table class="table table-striped-columns table-hover">
+                    <tbody class="border">
+                        <tr>
+                            <th scope="row" class="text-capitalize">serailizer Class</th>
+                            {% if context.serializer_class %}
+                            <td>{{context.serializer_class}}</td>
+                            {% else %}
+                            <td>None</td>
+                            {%endif%}
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-capitalize">fields</th>
+                            {% if context.fields %}
+                            <td>{{context.fields}}</td>
+                            {% else %}
+                            <td>None</td>
+                            {%endif%}
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-capitalize">permission classes</th>
+                            {% if context.permission_classes %}
+                            <td>{{context.permission_classes}}</td>
+                            {% else %}
+                            <td>None</td>
+                            {%endif%}
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-capitalize">pagination class</th>
+                            {% if context.pagination_class %}
+                            <td>{{context.pagination_class}}</td>
+                            {% else %}
+                            <td>None</td>
+                            {%endif%}
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-capitalize">authentication classes</th>
+                            {% if context.authentication_classes %}
+                            <td>{{context.authentication_classes}}</td>
+                            {% else %}
+                            <td>None</td>
+                            {%endif%}
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-capitalize">lookup field</th>
+                            {% if context.lookup_field %}
+                            <td>{{context.lookup_field}}</td>
+                            {% else %}
+                            <td>None</td>
+                            {%endif%}
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-capitalize">renderer classes</th>
+                            {% if context.renderer_classes %}
+                            <td>{{context.renderer_classes}}</td>
+                            {% else %}
+                            <td>None</td>
+                            {%endif%}
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-capitalize">throttle classes</th>
+                            {% if context.throttle_classes %}
+                            <td>{{context.throttle_classes}}</td>
+                            {% else %}
+                            <td>None</td>
+                            {%endif%}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% for content in menu_context %}
+    <!-- Jumbotron -->
+    <div class="p-4 shadow-4 rounded mb-3 border" id="{{content.app_name}}">
+        {% if content.model %}
+        <h2>{{content.model}}</h2>
+        <p>{{content.docs}}</p>
+        <p>
+            <button type="button" class="btn btn-primary btn-sm me-2 text-capitalize copy-link-btn"
+                onclick="copyToClipboard(this)">
+                Copy Link
+            </button>
+            <code class="api-link">
+            {% if "-detail" in content.app_name %}
+                {% url content.app_name 1 %}
+                {%else%}
+                {% url content.app_name %}
+                {% endif %}
+            </code>
+        </p>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                {% for app in content.app_actions %}
+                <button class="nav-link text-capitalize {% if forloop.first %}active{%endif%}"
+                    id="nav-{{content.app_name}}-{{app}}-tab" data-bs-toggle="tab"
+                    data-bs-target="#nav-{{content.app_name}}-{{app}}" type="button" role="tab"
+                    aria-controls="nav-{{content.app_name}}-{{app}}" aria-selected="true">{{app}}</button>
+                {% endfor %}
+            </div>
+        </nav>
+        {{content}}
+        <div class="tab-content" id="nav-tabContent">
+            {% for app in content.app_actions %}
+            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+                id="nav-{{content.app_name}}-{{app}}" role="tabpanel"
+                aria-labelledby="nav-{{content.app_name}}-{{app}}-tab" tabindex="0">
+                <div class="card card-body mt-3">
+                    {% if app == 'list' %}
+                    {% include 'quick_docs_drf/bootstrap/url-info.html' %}
+                    {%elif app == 'create' %}
+                    {% include 'quick_docs_drf/bootstrap/url-info.html' %}
+                    {%elif app == 'retrieve' %}
+                    {% include 'quick_docs_drf/bootstrap/url-info.html' %}
+                    {%elif app == 'update' %}
+                    {% include 'quick_docs_drf/bootstrap/url-info.html' %}
+                    {%elif app == 'partial_update' %}
+                    {% include 'quick_docs_drf/bootstrap/url-info.html' %}
+                    {%elif app == 'destroy' %}
+                    {% include 'quick_docs_drf/bootstrap/url-info.html' %}
+                    {%endif%}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {%else%}
+        <h2>{{content.name}}</h2>
+        <p>{{content.docs}}</p>
+        <p>
+            <button type="button" class="btn btn-primary btn-sm me-2 copy-link-btn" onclick="copyToClipboard(this)">
+                Copy Link
+            </button>
+            <code class="api-link">
+                    {% if "-detail" in content.app_name %}
+                        {% url content.app_name 1 %}
+                        {%else%}
+                        {% url content.app_name %}
+                        {% endif %}
+                    </code>
+        </p>
+        {%endif%}
+    </div>
+    {%endfor%}
+    {% if project_author_email %}
+    <div class="p-4 shadow-4 rounded mb-3 border" id="contact">
+        <h2>Contact</h2>
+        For any questions, please reach out to our support team at
+        <code>
+            <a href="mailto:{{project_author_email}}" class="text-decoration-none">
+                {{project_author_email}}
+            </a>
+        </code>
+    </div>
+    {% endif %}
+    {% if project_repository %}
+    <div class="p-4 shadow-4 rounded mb-3 border" id="contributions">
+        <h2>
+            Contributions
+        </h2>
+        We welcome contributions! Please check our GitHub repository for more information.
+        <code>
+                {{project_repository}}
+        </code>
+    </div>
+    {%endif%}
+    {% if project_license %}
+    <div class="p-4 shadow-4 rounded mb-3 border" id="license">
+        <h2>
+            License
+        </h2>
+        This API is licensed under the <code>{{project_license}}</code> License. See the LICENSE file for more details.
+    </div>
+    {%endif%}
+</div>

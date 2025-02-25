@@ -1,0 +1,32 @@
+{% extends 'quick_docs_drf_base.html' %}
+{% load static %}
+
+{% block css %}
+{% if template_style != "tailwind" %}
+<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+{% else %}
+<link rel="stylesheet" href="{% static 'css/daisy.css' %}">
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+{% if template_style != "tailwind" %}
+{% include 'quick_docs_drf/bootstrap.html' %}
+{% else %}
+{% include 'quick_docs_drf/tailwind.html' %}
+{% endif %}
+{% endblock %}
+
+{% block js %}
+{% if template_style != "tailwind" %}
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/popper.js' %}"></script>
+<script src="{% static 'js/bootstrap-theme.js' %}"></script>
+<script src="{% static 'js/bootstrap-utils.js' %}"></script>
+{% else %}
+<script src="{% static 'js/tailwind.js' %}"></script>
+<script src="{% static 'js/tailwind-theme.js' %}"></script>
+<script src="{% static 'js/tailwind-utils.js' %}"></script>
+{% endif %}
+{% endblock %}

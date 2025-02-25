@@ -1,0 +1,23 @@
+{% load static %}
+<div class="navbar bg-base-100 sticky top-0 z-[100]">
+    <div class="navbar-start">
+        <div class="dropdown dropdown-start">
+            <label for="my-drawer-2" tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                </svg>
+            </label>
+        </div>
+    </div>
+    <div class="navbar-center">
+        <a role="button" class="btn btn-ghost text-xl">{{project_name}}</a>
+    </div>
+    <div class="navbar-end">
+        <div tabindex="0" role="button" class="me-5">
+            <select class="select select-sm select-bordered w-full max-w-xs" id="themeSelect">
+                {% include 'quick_docs_drf/tailwind/theme-options.html' %}
+            </select>
+        </div>
+    </div>
+</div>
